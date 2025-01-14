@@ -35,13 +35,34 @@ module top_uart_tb;
   reg rx;
   wire tx;
 
+  reg [4:0] mem [0:15];
   top_uart  top_uart_inst (
     .clk(clk),
     .rst_n(rst_n),
     .rx(rx),
     .tx(tx)
   );
+initial begin
+  clk = 0;
+  rst_n = 1;
+  #100
+  rst_n = 0;
+end
 
-//always #5  clk = ! clk ;
+always #10  clk = ! clk ;
 
+
+initial begin
+  $readmemh("../data/data.txt",mem);
+end
+
+task tx_byte();
+  integer i;
+  begin
+    for(i=0;i<16;i++)
+    begin 
+      mem[i];
+    end
+  end
+endtask
 endmodule
