@@ -24,22 +24,26 @@
 //----------------------------------------------------------------------------------------
 //****************************************************************************************//
 
-module uart_rx(
+module uart_rx#(
+    parameter clk_frequence = 5_000_000,
+    parameter baud_rate = 9600
+)(
     input                               clk                        ,
     input                               rst_n                     ,
     input rx,
     output reg [7:0] po_data,
     output reg po_flag
   );
-  parameter baud_rate = 9600;
-  parameter cnt_width = $clog(baud_rate);
+
+  parameter cnt_baud_max = clk_frequence/baud_rate;
+  parameter cnt_baud_width = $clog2(cnt_baud_max);
 
   reg rx1;
   reg rx2;
   reg rx2_reg;
 
   reg rx_flag;
-  reg [cnt_width-1:0] cnt_baud;
+  reg [cnt_baud_width-1:0] cnt_baud;
   reg [3:0] bit_cnt;
   reg      bit_flag;
   //   always @(posedge clk or negedge rst_n)
@@ -67,7 +71,7 @@ module uart_rx(
   begin
     if(!rst_n)
       bit_flag <= 1'b0;
-    else if(rx_flag == 1 && cnt_baud == (baud_rate/2))
+    else if(rx_flag == 1 && cnt_baud == (cnt_baud_max/2))
       bit_flag <= 1'b1;
     else
       bit_flag <= 1'b0;
@@ -111,8 +115,8 @@ module uart_rx(
       po_data <=  'b0;
     else if (bit_cnt == 8 &&  bit_flag == 1)
       po_data <= 'b0;
-    else if(bit_flag)
-      po_data <= {po_data[7:0],rx2_reg};
+    else if(bit_flag && bit_cnt > 4'd0)
+      po_data <= {rx2_reg,po_data[7:1]};
   end
 
   always @(posedge clk or negedge rst_n)
