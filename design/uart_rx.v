@@ -81,7 +81,7 @@ module uart_rx#(
   begin
     if(!rst_n)
       bit_cnt <= 'b0;
-    else if(bit_cnt == 8)
+    else if(bit_flag && bit_cnt == 8)
       bit_cnt <= 'd0;
     else if(bit_flag)
       bit_cnt <= bit_cnt + 1;

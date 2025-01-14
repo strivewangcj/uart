@@ -87,7 +87,7 @@ module uart_tx#(
   begin
     if(!rst_n)
       bit_flag <= 1'b0;
-    else if(tx_flag && cnt_baud == cnt_baud_max)
+    else if(tx_flag && cnt_baud == cnt_baud_max - 1 )
       bit_flag <= 1'b1;
     else
       bit_flag <= 1'b0;
