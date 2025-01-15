@@ -31,7 +31,7 @@ module top_uart(
     output tx
 );
                                                                    
-localparam clk_frequence = 5_000_000 ;
+localparam clk_frequence = 50_000_000 ;
 localparam baud_rate = 9600;
 wire [7:0]  po_data;
 wire po_flag;

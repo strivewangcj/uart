@@ -25,7 +25,7 @@
 //****************************************************************************************//
 
 module uart_tx#(
-    parameter clk_frequence = 5_000_000,
+    parameter clk_frequence = 50_000_000,
     parameter baud_rate = 9600
   )(
     input                               clk                        ,

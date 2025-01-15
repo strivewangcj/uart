@@ -25,7 +25,7 @@
 //****************************************************************************************//
 
 module uart_rx#(
-    parameter clk_frequence = 5_000_000,
+    parameter clk_frequence = 50_000_000,
     parameter baud_rate = 9600
 )(
     input                               clk                        ,
@@ -101,7 +101,7 @@ module uart_rx#(
   begin
     if(!rst_n)
       cnt_baud <= 'b0;
-    else if (cnt_baud == baud_rate)
+    else if (cnt_baud == cnt_baud_max)
       cnt_baud <= 'b0;
     else if(bit_cnt == 8 && bit_flag)
       cnt_baud <= 'b0;
@@ -113,8 +113,8 @@ module uart_rx#(
   begin
     if(!rst_n)
       po_data <=  'b0;
-    else if (bit_cnt == 8 &&  bit_flag == 1)
-      po_data <= 'b0;
+ //   else if (bit_cnt == 8 &&  bit_flag == 1)  //!´íÎóÏë·¨!
+ //     po_data <= 'b0;
     else if(bit_flag && bit_cnt > 4'd0)
       po_data <= {rx2_reg,po_data[7:1]};
   end
